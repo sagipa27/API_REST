@@ -1,13 +1,15 @@
 
 import express from 'express';
-import { login, register } from '../controllers/auth.controller.js';
+import { infouser, login, register } from '../controllers/auth.controller.js';
 import { body } from 'express-validator';
 import { validationResults } from '../middlewares/validationResults.js';
+import { requireToken } from '../middlewares/requireToken.js';
+
 
 const router = express.Router();
 
 
-
+//Ruta para registro
 router.post("/register", [
     body('email', 'Formato de Email incorrecto')
         .trim()
@@ -27,6 +29,8 @@ router.post("/register", [
 ], validationResults,
     register
 );
+
+//Ruta para login 
 router.post("/login", [
     body('email', 'Formato de Email incorrecto')
         .trim()
@@ -39,4 +43,7 @@ router.post("/login", [
     login
 
 );
+
+router.get('/protected', requireToken, infouser);
+
 export default router;

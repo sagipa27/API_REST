@@ -1,5 +1,6 @@
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import { generateToken } from '../utils/tokenManager.js';
 
 export const register = async (req, res) => {
     const { email, password } = req.body;
@@ -35,10 +36,10 @@ export const login = async (req, res) => {
         }
 
         //Generar JWT token
-        const token = jwt.sign({ uid: user.id }, process.env.JWT_SECRET);
+        const { token, expiresIn } = generateToken(user.id);
 
 
-        return res.json({ token });
+        return res.json({ token, expiresIn });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: 'Error de servidor' });
@@ -46,3 +47,14 @@ export const login = async (req, res) => {
 
 };
 
+
+export const infouser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.uid).lean(); //Lean se usa para cambiar el objeto de Mongoose a un objeto simple de JS
+        res.json({ email: user.email, uid: user.id });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error de servidor' });
+    }
+
+
+}
