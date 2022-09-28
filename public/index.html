@@ -30,7 +30,7 @@
                 });
                 console.log(res.ok, res.status);
 
-                const data = await res.json();
+                const {token} = await res.json();
                 console.log(data);
                 
             } catch (error) {

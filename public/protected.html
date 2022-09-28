@@ -8,28 +8,34 @@
 </head>
 <body>
     <h1>Ruta protegida</h1>
-    <div id="app">
-        <h2>Email:</h2>
+    <div >
+        <h2 id="app">Email: </h2>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', async  e=> {
+        
+        document.addEventListener('DOMContentLoaded',  async (e) => {
             try {
-                const token = '???'
-                const res = await fetch('/api/v1/auth/protected',{
+                
+                const res  = await fetch('/api/v1/auth/protected',
+                {
                     method: 'GET',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json' 
-                    }
-
+                    },
                 });
                 console.log(res.ok, res.status);
                 const data = await res.json();
+                if(res.ok)
+                {
+                    document.getElementById('app').textContent = data.email
+                };
+                console.log(data);
             } catch (error) {
                 console.log(error);
             }
-        })
+
+        });
     </script>
-</div>
 </body>
 </html>

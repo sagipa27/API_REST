@@ -38,6 +38,7 @@ export const login = async (req, res) => {
         //Generar JWT token
         const { token, expiresIn } = generateToken(user.id);
 
+        res.cookie('token', token);
 
         return res.json({ token, expiresIn });
     } catch (error) {
