@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 //middleware para validar autorizacion por medio de token
+
 export const requireToken = (req, res, next) => {
     try {
         let token = req.headers?.authorization;

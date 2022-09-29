@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
-import { generateToken } from '../utils/tokenManager.js';
+import { generateRefreshToken, generateToken } from '../utils/tokenManager.js';
 
 export const register = async (req, res) => {
     const { email, password } = req.body;
@@ -38,7 +38,8 @@ export const login = async (req, res) => {
         //Generar JWT token
         const { token, expiresIn } = generateToken(user.id);
 
-        res.cookie('token', token);
+        generateRefreshToken(user.id, res);
+
 
         return res.json({ token, expiresIn });
     } catch (error) {
