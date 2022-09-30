@@ -4,13 +4,15 @@ import jwt from 'jsonwebtoken';
 
 export const requireToken = (req, res, next) => {
     try {
+
         let token = req.headers?.authorization;
 
-        if (!token)
-            throw new Error('No existe Bearer token');
 
-        token = token.split(' ')[1];
-        // se almacena en la constante uid la información del usuario en caso de que se cumpla la verificación del token
+        if (!token) throw new Error("No Bearer");
+
+
+        token = token.split(" ")[1];
+        console.log(token);
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
 
         req.uid = uid;
@@ -26,6 +28,7 @@ export const requireToken = (req, res, next) => {
             'invalid token': 'Token no valido',
             'No Bearer': 'Usar formato Bearer',
             'jwt malformed': 'JWT formato no valido',
+            'jwt must be provided': 'se debe enviar un JWT',
         };
         return res
             .status(401)
