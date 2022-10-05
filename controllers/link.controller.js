@@ -84,7 +84,7 @@ export const removeLink = async (req, res) => {
 export const updateLink = async (req, res) => {
     try {
         const { id } = req.params;
-        const { longLink } = req.body;
+        let { longLink } = req.body;
 
         console.log(longLink);
 
