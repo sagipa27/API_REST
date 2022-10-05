@@ -8,36 +8,108 @@
 </head>
 <body>
     <form id="form">
-        <input type="email" value="peree27tuiuy@hotmail.com" id="email">
-        <input type="password" value="admin213" id="password">
-        <button type="submit">Acceder</button>
+        <input type="email" value="sagipa27@hotmail.com" id="email">
+        <input type="password" value="admin123" id="password">
+        <button type="submit" onclick="login()">Acceder</button>
+        <h2 id="app">Email: </h2>
     </form>
     <script>
-        const form = document.getElementById('form');
-        const email = document.getElementById('email'); 
-        const password = document.getElementById('password');
+        
+function login(){
 
-        form.addEventListener('submit', async e => {
-            e.preventDefault();
+    const form = document.getElementById('form');
+    const email = document.getElementById('email'); 
+    const password = document.getElementById('password');
+    
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault();
+        try {
+            const res = await fetch('http://localhost:5000/api/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({email: email.value ,password: password.value})
+                
+            });
+            console.log(res.ok, res.status);
+
+            const {token} = await res.json();
+            console.log(data);
+            
+        } catch (error) {
+            
+        }
+
+    })
+    }
+
+    function logout(){
+
+        fetch('/api/v1/auth/logout')
+            .then(response => response.json())
+            .then(data =>
+                console.log(data)
+            );
+    }
+
+    async function create(){
+            const resToken = await fetch('/api/v1/auth/refresh',{
+                method: 'GET',
+                credentials: 'include'
+            });
+            const { token } = await resToken.json();
+
+            fetch('api/v1/links', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({"longLink" : "https://www.politecnicojic.edu.co/" })
+            }).then(res => res.json())
+            .then(res => 
+                console.log(res),                
+            );
+        }    
+                       
+
+        document.addEventListener('DOMContentLoaded',  async (e) => {
             try {
-                const res = await fetch('/api/v1/auth/login', {
-                    method: 'POST',
+
+
+                const resToken = await fetch('/api/v1/auth/refresh',{
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+
+                const { token } = await resToken.json();
+
+                const res  = await fetch('/api/v1/auth/protected',
+                {
+                    method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json' 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
                     },
-                    body: JSON.stringify({email: email.value ,password: password.value})
-                    
+                    //credentials: 'include'
                 });
                 console.log(res.ok, res.status);
-
-                const {token} = await res.json();
+                const data = await res.json();
+                if(res.ok)
+                {
+                    document.getElementById('app').textContent = data.email
+                };
                 console.log(data);
-                
             } catch (error) {
-                
+                console.log(error);
             }
 
-        })
+        });
+    
     </script>
 </body>
 </html>

@@ -12,7 +12,7 @@ const app = express();
 
 const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2]
 
-app.use(cors({
+/*app.use(cors({
     origin: function (origin, callback) {
         if (!origin || whiteList.includes(origin)) {
             return callback(null, origin);
@@ -20,7 +20,7 @@ app.use(cors({
         return callback("Error de CORS origin: " + origin + "no autorizado!");
     },
 }));
-
+*/
 
 app.use(cookieParser());
 app.use(express.json());
