@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
     <form id="form">
@@ -20,6 +21,11 @@
     <input type="text" id="longlink"><br><br>
     <button id="longLinkButton" onclick="create()">Crear</button>
 
+<div>
+    <h2>Leer datos</h2>
+    <button id="longLinkButton" onclick="read()">Obtener</button>
+
+    <pre id="arrPrint"></pre>
 </div>
 <script>
         
@@ -87,7 +93,43 @@
             );
         }    
                        
+    
+    async function read(){
+         let arr; 
+             const resToken = await fetch('/api/v1/auth/refresh',{
+                method: 'GET',
+                credentials: 'include'
+            });
+            const { token } = await resToken.json();
+       
+            const res = fetch('api/v1/links', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+            
+            }).then(res => res.json())
+            .then(res => {
+                console.log("Los links son:")
+                arr = res.links;
+                document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
+            })
+                 
+               
+                  
+        };
+            
+    function deleteLink(){
 
+    }
+          
+
+        
+        
+            // document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
+    
         // document.addEventListener('DOMContentLoaded',  async (e) => {
         //     try {
 
