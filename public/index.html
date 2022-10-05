@@ -11,11 +11,19 @@
         <input type="email" value="sagipa27@hotmail.com" id="email">
         <input type="password" value="admin123" id="password">
         <button type="submit" onclick="login()">Acceder</button>
-        <h2 id="app">Email: </h2>
+        <!-- <h2 id="app">Email: </h2> -->
     </form>
-    <script>
+</form>
+<h2>Crear nanoLink</h2>
+
+    <label for="fname">Introduzca LongLink:</label>
+    <input type="text" id="longlink"><br><br>
+    <button id="longLinkButton" onclick="create()">Crear</button>
+
+</div>
+<script>
         
-function login(){
+    function login(){
 
     const form = document.getElementById('form');
     const email = document.getElementById('email'); 
@@ -55,12 +63,16 @@ function login(){
     }
 
     async function create(){
+            
+            const longLink = document.getElementById('longlink').value;
+            
+            
             const resToken = await fetch('/api/v1/auth/refresh',{
                 method: 'GET',
                 credentials: 'include'
             });
             const { token } = await resToken.json();
-
+            console.log("el link es " + longLink);
             fetch('api/v1/links', {
             method: 'POST',
             headers: {
@@ -68,7 +80,7 @@ function login(){
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token
             },
-            body: JSON.stringify({"longLink" : "https://www.politecnicojic.edu.co/" })
+            body: JSON.stringify({"longLink" : longLink})
             }).then(res => res.json())
             .then(res => 
                 console.log(res),                
@@ -76,40 +88,40 @@ function login(){
         }    
                        
 
-        document.addEventListener('DOMContentLoaded',  async (e) => {
-            try {
+        // document.addEventListener('DOMContentLoaded',  async (e) => {
+        //     try {
 
 
-                const resToken = await fetch('/api/v1/auth/refresh',{
-                    method: 'GET',
-                    credentials: 'include'
-                });
+        //         const resToken = await fetch('/api/v1/auth/refresh',{
+        //             method: 'GET',
+        //             credentials: 'include'
+        //         });
 
 
-                const { token } = await resToken.json();
+        //         const { token } = await resToken.json();
 
-                const res  = await fetch('/api/v1/auth/protected',
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token,
-                    },
-                    //credentials: 'include'
-                });
-                console.log(res.ok, res.status);
-                const data = await res.json();
-                if(res.ok)
-                {
-                    document.getElementById('app').textContent = data.email
-                };
-                console.log(data);
-            } catch (error) {
-                console.log(error);
-            }
+        //         const res  = await fetch('/api/v1/auth/protected',
+        //         {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization': 'Bearer ' + token,
+        //             },
+        //             //credentials: 'include'
+        //         });
+        //         console.log(res.ok, res.status);
+        //         const data = await res.json();
+        //         if(res.ok)
+        //         {
+        //             document.getElementById('app').textContent = data.email
+        //         };
+        //         console.log(data);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
 
-        });
+        // });
     
-    </script>
+</script>
 </body>
 </html>

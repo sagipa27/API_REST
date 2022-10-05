@@ -3,6 +3,6 @@ import { redirectLink } from "../controllers/redirect.controller.js";
 const router = Router();
 
 
-router.get('/:nanoLink', redirectLink);
+router.get('/redirect/:nanoLink', redirectLink);
 
 export default router; 
