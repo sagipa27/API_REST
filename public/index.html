@@ -1,241 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="CSS/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="CSS/index.css" />
+  </head>
+  <body>
     <header>
-        <h1>API Computacion orientada a servicios</h1>
-    </header>
-    <div>
+      <div>
         <form id="form">
-            <input type="email" value="sagipa27@hotmail.com" id="email">
-            <input type="password" value="admin123" id="password">
-            <button type="submit" onclick="login()">Acceder</button>
+          <label for="fname" class="label">Email:</label>
+          <input type="email" value="sagipa27@hotmail.com" id="email" class="text-input"/>
+          <label for="fname" class="label">Contraseña:</label>
+          <input type="password" value="admin123" id="password" class="text-input"/>
+          <button class="btn-header" type="submit" onclick="login()">Acceder</button>
         </form>
-    </div>
-   
-
-<div>
-
+      </div>
+      
+      <div>
+            <button  class="btn-header" type="button" onclick="logout()">Logout</button>
+      </div>
     
-        <h2>Crear nanoLink</h2>
+  </header>
+    <div id="container">
+       
+      <div>
+        <div>
+          <h2 class="subtitle">Crear nanoLink</h2>
     
-        <label for="fname">Introduzca LongLink:</label>
-        <input type="text" id="longlink"><br><br>
-        <button class="btn-form" onclick="create()">Crear</button>
-  
-    
-</div>
-
-
-<div>
-    <h2>Leer datos</h2>
-    <button id="longLinkButton" onclick="read()">Obtener</button>
-
-    <pre id="arrPrint"></pre>
-</div>
-
-<div>
-        <h2>Eliminar Link</h2>
-        <label for="fname">Introduzca ID de link a eliminar:</label>
-        <input type="text" id="idEliminar"><br><br>
-        <button  class="btn-form" onclick="deleteLink()">Eliminar</button>
- </div>
-
-<div>
-        <h2>Actualizar nanoLink</h2>
-        <label for="fname">Introduzca ID de link a actualizar:</label>
-        <input type="text" id="idUpdate"><br><br>
-        <label for="fname">Introduzca Longlink a actualizar:</label>
-        <input type="text" id="updLink"><br><br>
-        <button type="submit"  class="btn-form" onclick="updateLink()">Actualizar</button>
-
-
-</div>
-<script>
+          <label for="fname" class="label">Introduzca LongLink:</label>
+          <input class="text-input" type="text" id="longlink" /><br /><br />
+          <button class="btn-form" onclick="create()">Crear</button>
+        </div>
+        <div>
+          <h2 class="subtitle">Actualizar nanoLink</h2>
+          <label for="fname" class="label">Introduzca ID de link a actualizar:</label>
+          <input class="text-input" type="text" id="idUpdate" /><br /><br />
+          <label for="fname" class="label">Introduzca Longlink a actualizar:</label>
+          <input class="text-input" type="text" id="updLink" /><br /><br />
+          <button type="submit" class="btn-form" onclick="updateLink()">
+            Actualizar
+          </button>
+        </div>
         
-    function login(){
-
-    const form = document.getElementById('form');
-    const email = document.getElementById('email'); 
-    const password = document.getElementById('password');
+      </div>
+      <div>
+        <div>
+          <h2 class="subtitle">Leer datos</h2>
+          <button id="longLinkButton" onclick="read()" class="btn-form">Obtener</button>
     
+          <pre id="arrPrint"></pre>
+        </div>
+        <div>
+          <h2 class="subtitle">Eliminar Link</h2>
+          <label for="fname" class="label">Introduzca ID de link a eliminar:</label>
+          <input class="text-input"  type="text" id="idEliminar" /><br /><br />
+          <button class="btn-form" onclick="deleteLink()">Eliminar</button>
+        </div>
+    
+       
+      </div>
+      
+          
+    </div>
+    
+    <script>
+      function login() {
+        const form = document.getElementById("form");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
 
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-        try {
-            const res = await fetch('http://localhost:5000/api/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({email: email.value ,password: password.value})
-                
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: email.value,
+                password: password.value,
+              }),
             });
             console.log(res.ok, res.status);
 
-            const {token} = await res.json();
+            const { token } = await res.json();
             console.log(data);
-            
-        } catch (error) {
-            
-        }
+          } catch (error) {}
+        });
+      }
 
-    })
-    }
+      function logout() {
+        fetch("/api/v1/auth/logout")
+          .then((response) => response.json())
+          .then((data) => console.log(data));
+      }
 
-    function logout(){
+      async function create() {
+        const longLink = document.getElementById("longlink").value;
 
-        fetch('/api/v1/auth/logout')
-            .then(response => response.json())
-            .then(data =>
-                console.log(data)
-            );
-    }
-
-    async function create(){
-            
-            const longLink = document.getElementById('longlink').value;
-            
-            
-            const resToken = await fetch('/api/v1/auth/refresh',{
-                method: 'GET',
-                credentials: 'include'
-            });
-            const { token } = await resToken.json();
-            console.log("el link es " + longLink);
-            fetch('api/v1/links', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({"longLink" : longLink})
-            }).then(res => res.json())
-            .then(res => 
-                console.log(res),                
-            );
-        }    
-                       
-    
-    async function read(){
-         let arr; 
-             const resToken = await fetch('/api/v1/auth/refresh',{
-                method: 'GET',
-                credentials: 'include'
-            });
-            const { token } = await resToken.json();
-       
-            const res = fetch('api/v1/links', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            }
-            
-            }).then(res => res.json())
-            .then(res => {
-                console.log("Los links son:")
-                arr = res.links;
-                document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
-            })
-                 
-               
-                  
-        };
-            
-    async function deleteLink(){
-        const idEliminar = document.getElementById("idEliminar").value;
-        const resToken = await fetch('/api/v1/auth/refresh',{
-                method: 'GET',
-                credentials: 'include'
-            });
-            const { token } = await resToken.json();
-       
-            const res = fetch('api/v1/links/'+ idEliminar, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            }
-
-            })
-    }
-
-    async function updateLink(){
-            
-            let updLink = document.getElementById('updLink').value;
-            const idUpdate = document.getElementById('idUpdate').value;
-            
-            const resToken = await fetch('/api/v1/auth/refresh',{
-                method: 'GET',
-                credentials: 'include'
-            });
-            const { token } = await resToken.json();
-
-         
-            fetch('api/v1/links/' + idUpdate, {
-            method: 'PATCH',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({"longLink" : updLink})
-           
+        const resToken = await fetch("/api/v1/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        });
+        const { token } = await resToken.json();
+        console.log("el link es " + longLink);
+        fetch("api/v1/links", {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ longLink: longLink }),
         })
-    } 
+          .then((res) => res.json())
+          .then((res) => console.log(res));
+      }
 
-    
+      async function read() {
+        let arr;
+        const resToken = await fetch("/api/v1/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        });
+        const { token } = await resToken.json();
 
-          
+        const res = fetch("api/v1/links", {
+          method: "GET",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log("Los links son:");
+            arr = res.links;
+            document.getElementById("arrPrint").innerHTML = JSON.stringify(
+              arr,
+              null,
+              2
+            );
+          });
+      }
 
-        
-        
-            // document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
-    
-        // document.addEventListener('DOMContentLoaded',  async (e) => {
-        //     try {
+      async function deleteLink() {
+        const idEliminar = document.getElementById("idEliminar").value;
+        const resToken = await fetch("/api/v1/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        });
+        const { token } = await resToken.json();
 
+        const res = fetch("api/v1/links/" + idEliminar, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        });
+      }
 
-        //         const resToken = await fetch('/api/v1/auth/refresh',{
-        //             method: 'GET',
-        //             credentials: 'include'
-        //         });
+      async function updateLink() {
+        let updLink = document.getElementById("updLink").value;
+        const idUpdate = document.getElementById("idUpdate").value;
 
+        const resToken = await fetch("/api/v1/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        });
+        const { token } = await resToken.json();
 
-        //         const { token } = await resToken.json();
+        fetch("api/v1/links/" + idUpdate, {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ longLink: updLink }),
+        });
+      }
 
-        //         const res  = await fetch('/api/v1/auth/protected',
-        //         {
-        //             method: 'GET',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'Authorization': 'Bearer ' + token,
-        //             },
-        //             //credentials: 'include'
-        //         });
-        //         console.log(res.ok, res.status);
-        //         const data = await res.json();
-        //         if(res.ok)
-        //         {
-        //             document.getElementById('app').textContent = data.email
-        //         };
-        //         console.log(data);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
+      // document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
 
-        // });
-    
-</script>
-</body>
+      // document.addEventListener('DOMContentLoaded',  async (e) => {
+      //     try {
+
+      //         const resToken = await fetch('/api/v1/auth/refresh',{
+      //             method: 'GET',
+      //             credentials: 'include'
+      //         });
+
+      //         const { token } = await resToken.json();
+
+      //         const res  = await fetch('/api/v1/auth/protected',
+      //         {
+      //             method: 'GET',
+      //             headers: {
+      //                 'Content-Type': 'application/json',
+      //                 'Authorization': 'Bearer ' + token,
+      //             },
+      //             //credentials: 'include'
+      //         });
+      //         console.log(res.ok, res.status);
+      //         const data = await res.json();
+      //         if(res.ok)
+      //         {
+      //             document.getElementById('app').textContent = data.email
+      //         };
+      //         console.log(data);
+      //     } catch (error) {
+      //         console.log(error);
+      //     }
+
+      // });
+    </script>
+  </body>
 </html>
