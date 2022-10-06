@@ -24,6 +24,10 @@ header{
     background-color: var(--light-grey);
 }
 
+header a{
+    text-decoration: none;
+    color: var(--orange);
+}
 .btn-header{
     background-color:  var(--dark-blue);
     border-radius: 40px;
@@ -76,3 +80,23 @@ header{
 .btn-form:hover {
     opacity: 0.5;
   }
+
+  footer {
+    display: flex;
+    justify-content: center;
+}
+
+.container-footer{
+     
+    justify-content: center;
+    width: 30rem;
+    margin-top: 6rem;
+    background-color: var(--dark-blue);
+    align-items: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    color: var(--light-grey);
+    border-radius: 30px;
+    padding-left: 3rem;
+    margin-bottom: 3rem;
+}

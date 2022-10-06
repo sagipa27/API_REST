@@ -12,13 +12,19 @@
       <div>
         <form id="form">
           <label for="fname" class="label">Email:</label>
-          <input type="email" value="sagipa27@hotmail.com" id="email" class="text-input"/>
+          <input type="email" value="sagipa27@hotmail.com" id="email" class="text-input"/> 
+        
           <label for="fname" class="label">Contraseña:</label>
           <input type="password" value="admin123" id="password" class="text-input"/>
-          <button class="btn-header" type="submit" onclick="login()">Acceder</button>
+          <button class="btn-header" type="submit" onclick="login()">Acceder</button> <br>
+          <a href="registro.html">Se desea registrar?</a>
         </form>
       </div>
-      
+      <!-- <div>
+          <label for="fname" class="label" >Redirigir:</label>
+          <input type="text" id="nanoLink" class="text-input"/>
+          <button class="btn-header" type="submit" onclick="redirigir()">Acceder</button>
+      </div> -->
       <div>
             <button  class="btn-header" type="button" onclick="logout()">Logout</button>
       </div>
@@ -188,39 +194,51 @@
         });
       }
 
-      // document.getElementById("arrPrint").innerHTML = JSON.stringify(arr, null, 2);
+      async function register() {
+        const email = document.getElementById("emailReg").value;
+        const password = document.getElementById("passwordReg").value;
+        const repassword = document.getElementById("repasswordReg").value;
 
-      // document.addEventListener('DOMContentLoaded',  async (e) => {
-      //     try {
+        const resToken = await fetch("/api/v1/auth/refresh", {
+          method: "GET",
+          credentials: "include",
+        });
 
-      //         const resToken = await fetch('/api/v1/auth/refresh',{
-      //             method: 'GET',
-      //             credentials: 'include'
-      //         });
+        const { token } = await resToken.json();
 
-      //         const { token } = await resToken.json();
 
-      //         const res  = await fetch('/api/v1/auth/protected',
-      //         {
-      //             method: 'GET',
-      //             headers: {
-      //                 'Content-Type': 'application/json',
-      //                 'Authorization': 'Bearer ' + token,
-      //             },
-      //             //credentials: 'include'
-      //         });
-      //         console.log(res.ok, res.status);
-      //         const data = await res.json();
-      //         if(res.ok)
-      //         {
-      //             document.getElementById('app').textContent = data.email
-      //         };
-      //         console.log(data);
-      //     } catch (error) {
-      //         console.log(error);
+        fetch("/api/v1/auth/register", {
+          method: "POST",
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ email: email, password: password, repassword: repassword }),
+        })
+          .then((res) => res.json())
+          .then((res) => console.log(res));
+      }
+      // async function redirigir(){
+      //   const nanoLink = document.getElementById("nanoLink").value;
+
+      //   const resToken = await fetch("/api/v1/auth/refresh", {
+      //     method: "GET",
+      //     credentials: "include",
+      //   });
+      //   const { token } = await resToken.json();
+
+      //   fetch("/redirect/" + nanoLink, {
+      //     method: "GET",
+      //     headers: {
+      //       Accept: "application/json, text/plain, */*",
+      //       "Content-Type": "application/json",
+      //       Authorization: "Bearer " + token
       //     }
+      //   });
+      // }
 
-      // });
+      
     </script>
   </body>
 </html>
